@@ -4,7 +4,6 @@ import (
 	"math/rand"
 	"strconv"
 	"testing"
-	"time"
 )
 
 func TestOpen(t *testing.T) {
@@ -21,7 +20,6 @@ func TestMiniBitcask_Put(t *testing.T) {
 		t.Error(err)
 	}
 
-	rand.Seed(time.Now().UnixNano())
 	keyPrefix := "test_key_"
 	valPrefix := "test_val_"
 	for i := 0; i < 10000; i++ {
@@ -68,7 +66,7 @@ func TestMiniBitcask_Del(t *testing.T) {
 		t.Error(err)
 	}
 
-	key := []byte("test_key_78")
+	key := []byte("test_key_0")
 	err = db.Del(key)
 
 	if err != nil {

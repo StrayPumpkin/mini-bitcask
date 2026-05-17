@@ -11,7 +11,7 @@ type MiniBitcask struct {
 	indexes map[string]int64 // 内存中的索引信息
 	dbFile  *DBFile          // 数据文件
 	dirPath string           // 数据目录
-	mu      sync.RWMutex
+	mu      sync.RWMutex     //读写锁
 }
 
 // Open 开启一个数据库实例
@@ -96,14 +96,15 @@ func (db *MiniBitcask) Merge() error {
 		db.indexes[string(entry.Key)] = writeOff
 	}
 
-	// 获取文件名
+	// 获取文件完整路径
 	dbFileName := db.dbFile.File.Name()
 	// 关闭文件
 	_ = db.dbFile.File.Close()
 	// 删除旧的数据文件
 	_ = os.Remove(dbFileName)
+	//关闭临时合并文件
 	_ = mergeDBFile.File.Close()
-	// 获取文件名
+	// 获取临时文件路径
 	mergeDBFileName := mergeDBFile.File.Name()
 	// 临时文件变更为新的数据文件
 	_ = os.Rename(mergeDBFileName, filepath.Join(db.dirPath, FileName))

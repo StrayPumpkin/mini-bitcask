@@ -15,9 +15,10 @@ type Entry struct {
 	Value     []byte
 	KeySize   uint32
 	ValueSize uint32
-	Mark      uint16
+	Mark      uint16 //操作类型（PUT/DEL)
 }
 
+// 构造函数
 func NewEntry(key, value []byte, mark uint16) *Entry {
 	return &Entry{
 		Key:       key,
